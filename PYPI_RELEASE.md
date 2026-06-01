@@ -59,8 +59,8 @@ Then publish to TestPyPI from GitHub Actions with a manual workflow run.
 Publish to real PyPI by pushing a version tag:
 
 ```powershell
-git tag v0.1.2
-git push origin v0.1.2
+git tag v0.1.3
+git push origin v0.1.3
 ```
 
 Manual upload is also possible:

@@ -1,4 +1,4 @@
-# garmin-connect-mcp-server
+# Garmin Connect MCP Server
 
 [![PyPI - Version](https://img.shields.io/pypi/v/garmin-connect-mcp-server)](https://pypi.org/project/garmin-connect-mcp-server/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dd/garmin-connect-mcp-server)](https://pypistats.org/packages/garmin-connect-mcp-server)
@@ -7,12 +7,6 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
 
 ![garmin mcp](https://github.com/user-attachments/assets/7d7bd126-ff3d-45d1-9013-7db89b629a7c)
-
-A PyPI-published Model Context Protocol (MCP) server for Garmin Connect.
-
-Use it with `uvx` from Msty Studio, Claude Desktop, or any other stdio MCP
-client. No repository clone, no virtual environment path, and no Windows
-launcher path are needed for normal use.
 
 ## Quick start with uvx
 
