@@ -316,7 +316,9 @@ def _score_label_match(query: str, label: str) -> float:
         _sorted_tokens(query),
         _sorted_tokens(label),
     ).ratio()
-    subset_bonus = 0.2 if len(query_tokens) > 1 and query_tokens <= label_tokens else 0.0
+    subset_bonus = (
+        0.2 if len(query_tokens) > 1 and query_tokens <= label_tokens else 0.0
+    )
     score = (
         (query_overlap * 0.55)
         + (jaccard * 0.25)

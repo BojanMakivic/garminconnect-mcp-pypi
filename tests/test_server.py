@@ -13,8 +13,8 @@ from garminconnect_mcp.server import (
     get_device_solar_data,
     list_saved_device_ids,
     match_strength_exercise,
-    set_activity_self_evaluation,
     set_activity_name,
+    set_activity_self_evaluation,
     set_activity_strength_exercise_sets,
     set_default_device_id,
     set_provider,
@@ -141,6 +141,39 @@ class FakeGarmin:
         }
 
 
+class FakeGarminPutClient:
+    def __init__(self, garmin: FakeGarminWithoutSetMethod) -> None:
+        self.garmin = garmin
+        self.put_calls: list[dict[str, object]] = []
+
+    def put(
+        self,
+        service: str,
+        url: str,
+        *,
+        json: dict[str, object],
+        api: bool,
+    ) -> dict[str, object]:
+        self.put_calls.append(
+            {"service": service, "url": url, "json": json, "api": api}
+        )
+        self.garmin.exercise_sets = json["exerciseSets"]  # type: ignore[assignment]
+        return {"ok": True}
+
+
+class FakeGarminWithoutSetMethod(FakeGarmin):
+    garmin_connect_activity = "/activity-service/activity"
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.client = FakeGarminPutClient(self)
+
+    def __getattribute__(self, name: str) -> object:
+        if name == "set_activity_exercise_sets":
+            raise AttributeError(name)
+        return super().__getattribute__(name)
+
+
 def setup_module() -> None:
     set_provider(FakeProvider())  # type: ignore[arg-type]
 
@@ -239,6 +272,37 @@ def test_set_activity_strength_exercise_sets_defaults_blank_set_type() -> None:
     assert result["exercise_sets"]["exerciseSets"][0]["setType"] == "ACTIVE"
 
 
+def test_set_activity_strength_exercise_sets_falls_back_to_client_put() -> None:
+    fake = FakeGarminWithoutSetMethod()
+    set_provider(FakeProvider(fake))  # type: ignore[arg-type]
+    try:
+        result = set_activity_strength_exercise_sets(
+            "42",
+            [
+                {
+                    "exercise": "hammer curl",
+                    "start_time": "2026-05-10T12:10:00.0",
+                    "repetitions": 10,
+                    "weight_kg": 12,
+                }
+            ],
+            confirm=True,
+        )
+    finally:
+        set_provider(FakeProvider())  # type: ignore[arg-type]
+
+    assert result["done"] is True
+    assert result["exercise_sets"]["exerciseSets"][0]["weightKg"] == 12
+    assert fake.client.put_calls == [
+        {
+            "service": "connectapi",
+            "url": "/activity-service/activity/42/exerciseSets",
+            "json": {"activityId": 42, "exerciseSets": fake.exercise_sets},
+            "api": True,
+        }
+    ]
+
+
 def test_match_strength_exercise_finds_close_garmin_exercise() -> None:
     result = match_strength_exercise("nordic curls")
 
@@ -314,7 +378,9 @@ def test_match_strength_exercise_rejects_low_confidence_matches() -> None:
         match_strength_exercise("completely imaginary moon press")
 
 
-def test_match_strength_exercise_uses_packaged_catalog(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_match_strength_exercise_uses_packaged_catalog(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     strength._load_catalog_exercises.cache_clear()
     monkeypatch.setattr(strength, "_load_remote_catalog_payload", lambda: {})
     try:

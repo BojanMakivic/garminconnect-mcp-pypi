@@ -231,9 +231,9 @@ def _coerce_direct_workout_rpe(value: int | float | str | None) -> int | None:
     if parsed < 0:
         raise ValueError("perceived_effort must be from 0 to 10")
     if parsed <= 10:
-        return int(round(parsed * 10))
+        return round(parsed * 10)
     if parsed <= 100:
-        return int(round(parsed))
+        return round(parsed)
     raise ValueError("perceived_effort must be from 0 to 10")
 
 
@@ -498,6 +498,55 @@ def _call(method_name: str, *args: Any, **kwargs: Any) -> Any:
 def _call_raw(method_name: str, *args: Any, **kwargs: Any) -> Any:
     method = getattr(_api(), method_name)
     return method(*args, **kwargs)
+
+
+def _set_activity_exercise_sets(
+    activity_id: str,
+    exercise_sets: list[dict[str, Any]],
+) -> Any:
+    try:
+        return as_jsonable(_set_activity_exercise_sets_raw(activity_id, exercise_sets))
+    except GarminMCPError:
+        raise
+    except Exception as exc:
+        _LOGGER.exception("Garmin method failed: set_activity_exercise_sets")
+        raise GarminMCPError(
+            f"Garmin set_activity_exercise_sets failed: {exc}"
+        ) from exc
+
+
+def _set_activity_exercise_sets_raw(
+    activity_id: str,
+    exercise_sets: list[dict[str, Any]],
+) -> Any:
+    api = _api()
+    method = getattr(api, "set_activity_exercise_sets", None)
+    if callable(method):
+        return method(activity_id, exercise_sets)
+
+    if not isinstance(exercise_sets, list):
+        raise GarminMCPError("exercise_sets must be a list")
+    try:
+        activity_id_int = int(activity_id)
+    except (TypeError, ValueError) as exc:
+        raise GarminMCPError("activity_id must be a positive integer") from exc
+    if activity_id_int <= 0:
+        raise GarminMCPError("activity_id must be a positive integer")
+
+    client = getattr(api, "client", None)
+    put = getattr(client, "put", None)
+    if not callable(put):
+        raise GarminMCPError(
+            "Installed garminconnect client cannot set activity exercise sets. "
+            "It does not expose set_activity_exercise_sets or client.put."
+        )
+
+    activity_base_url = getattr(api, "garmin_connect_activity", None)
+    if not activity_base_url:
+        activity_base_url = "/activity-service/activity"
+    url = f"{activity_base_url}/{activity_id_int}/exerciseSets"
+    payload = {"activityId": activity_id_int, "exerciseSets": exercise_sets}
+    return put("connectapi", url, json=payload, api=True)
 
 
 @mcp.tool()
@@ -989,7 +1038,7 @@ def set_activity_strength_exercise_sets(
                     {"activityId": activity_id, "exerciseSets": exercise_sets}
                 ),
             }
-        result = _call("set_activity_exercise_sets", activity_id, exercise_sets)
+        result = _set_activity_exercise_sets(activity_id, exercise_sets)
         return {
             "done": True,
             "activity_id": activity_id,
@@ -1069,7 +1118,7 @@ def create_strength_training_activity(
                 ),
             }
         if activity_id:
-            result = _call("set_activity_exercise_sets", activity_id, exercise_sets)
+            result = _set_activity_exercise_sets(activity_id, exercise_sets)
             self_evaluation = None
             if direct_workout_feel is not None or direct_workout_rpe is not None:
                 self_evaluation = as_jsonable(
@@ -1111,7 +1160,7 @@ def create_strength_training_activity(
             }
 
         try:
-            _call("set_activity_exercise_sets", activity_id, exercise_sets)
+            _set_activity_exercise_sets(activity_id, exercise_sets)
             self_evaluation = None
             if direct_workout_feel is not None or direct_workout_rpe is not None:
                 self_evaluation = as_jsonable(
