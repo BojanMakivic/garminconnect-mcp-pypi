@@ -39,6 +39,22 @@ C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
 The MCP server itself never prompts on stdin. For stdio MCP servers,
 stdout/stdin are reserved for protocol messages.
 
+## Dependencies
+
+When using `uvx`, users do not need to install Python libraries manually.
+`uvx` reads the package metadata from PyPI and installs the required libraries
+in its own managed environment before running the auth or server command.
+
+For users who clone this GitHub repository and run it manually, install the
+runtime libraries with:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+For development and tests, use the editable dev install shown in the
+development section below.
+
 ## Msty Studio setup
 
 Add a local stdio JSON tool in Msty Studio:
