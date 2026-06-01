@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "garmin-connect-mcp-server"
-version = "0.1.1"
+version = "0.1.2"
 description = "Model Context Protocol server for Garmin Connect"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
@@ -39,10 +39,10 @@ garminconnect-mcp = "garminconnect_mcp.server:main"
 garminconnect-mcp-auth = "garminconnect_mcp.auth:main"
 
 [project.urls]
-Homepage = "https://github.com/BojanMakivic/garminconnect-mcp"
-Documentation = "https://github.com/BojanMakivic/garminconnect-mcp#readme"
-Repository = "https://github.com/BojanMakivic/garminconnect-mcp"
-Issues = "https://github.com/BojanMakivic/garminconnect-mcp/issues"
+Homepage = "https://github.com/BojanMakivic/garminconnect-mcp-pypi"
+Documentation = "https://github.com/BojanMakivic/garminconnect-mcp-pypi#readme"
+Repository = "https://github.com/BojanMakivic/garminconnect-mcp-pypi"
+Issues = "https://github.com/BojanMakivic/garminconnect-mcp-pypi/issues"
 
 [tool.setuptools.packages.find]
 include = ["garminconnect_mcp*"]

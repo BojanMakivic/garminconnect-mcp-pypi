@@ -1,34 +1,13 @@
 # Msty Studio setup
 
-Msty Studio can run this server as a local stdio JSON tool. Install and
-authenticate the project before adding it to Msty.
-
-## Install
-
-Open PowerShell:
-
-```powershell
-cd C:\Users\YOUR_WINDOWS_USERNAME
-git clone https://github.com/BojanMakivic/garminconnect-mcp.git
-cd garminconnect-mcp
-py -3.13 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -e .
-```
-
-Python 3.12 also works:
-
-```powershell
-py -3.12 -m venv .venv
-```
+Msty Studio can run this server directly from PyPI with `uvx`.
 
 ## Authenticate Garmin locally
 
-Run this once:
+Run this once in a normal terminal:
 
 ```powershell
-cd C:\Users\YOUR_WINDOWS_USERNAME\garminconnect-mcp
-.\.venv\Scripts\garminconnect-mcp-auth.exe
+uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
 ```
 
 Garmin tokens stay on this machine in:
@@ -43,10 +22,9 @@ Create a local stdio JSON tool and paste:
 
 ```json
 {
-  "command": "C:\\Users\\YOUR_WINDOWS_USERNAME\\garminconnect-mcp\\.venv\\Scripts\\garminconnect-mcp.exe",
+  "command": "uvx",
   "args": [
-    "--tokenstore",
-    "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect"
+    "garmin-connect-mcp-server"
   ],
   "env": {
     "GARMINTOKENS": "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect",
@@ -55,8 +33,5 @@ Create a local stdio JSON tool and paste:
 }
 ```
 
-Replace `YOUR_WINDOWS_USERNAME` with your Windows username. If the project was
-cloned somewhere else, replace the project path with the real location.
-
-Use the full `.venv\Scripts\garminconnect-mcp.exe` path because desktop apps do
-not always inherit the same PATH as PowerShell.
+Replace `YOUR_WINDOWS_USERNAME` with your Windows username. The token path must
+match the directory created by the auth command.

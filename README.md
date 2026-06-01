@@ -1,66 +1,41 @@
 # garmin-connect-mcp-server
 
 [![PyPI - Version](https://img.shields.io/pypi/v/garmin-connect-mcp-server)](https://pypi.org/project/garmin-connect-mcp-server/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dd/garmin-connect-mcp-server)](https://pypistats.org/packages/garmin-connect-mcp-server)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/garmin-connect-mcp-server?period=total&units=NONE&left_color=GRAY&right_color=GREEN&left_text=total_downloads)](https://pepy.tech/projects/garmin-connect-mcp-server)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
 
 ![garmin mcp](https://github.com/user-attachments/assets/7d7bd126-ff3d-45d1-9013-7db89b629a7c)
 
-A local Model Context Protocol (MCP) server for Garmin Connect App.
+A PyPI-published Model Context Protocol (MCP) server for Garmin Connect.
 
-This project wraps the Python `garminconnect` package and exposes Garmin
-Connect data and selected account actions to MCP-capable clients such as Msty
-Studio, Claude Desktop, and other local stdio MCP clients.
+Use it with `uvx` from Msty Studio, Claude Desktop, or any other stdio MCP
+client. No repository clone, no virtual environment path, and no Windows
+launcher path are needed for normal use.
 
-## Important auth note
+## Quick start with uvx
 
-Garmin authentication stays local on each user's machine. Do not commit or copy
-Garmin tokens into this repository.
-
-By default, tokens are stored in:
-
-```text
-C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
-```
-
-The MCP server uses those local tokens when your desktop AI app starts it.
-
-## Install from a GitHub clone on Windows
-
-Use this flow when you cloned the repository from GitHub and want to run the
-local project in Msty Studio, Claude Desktop, or another stdio MCP client.
-
-Open PowerShell and run:
+Run first-time Garmin authentication once in a normal terminal:
 
 ```powershell
-cd C:\Users\YOUR_WINDOWS_USERNAME
-git clone https://github.com/BojanMakivic/garminconnect-mcp-pypi.git
-cd garminconnect-mcp-pypi
-py -3.13 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -e .
+uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
 ```
 
-Python 3.12 also works:
+Then run the MCP server:
 
 ```powershell
-py -3.12 -m venv .venv
-```
-
-Use the real folder where you cloned the project if it is not directly under
-`C:\Users\YOUR_WINDOWS_USERNAME`.
-
-## First-time Garmin authentication
-
-Run this once in a normal PowerShell terminal:
-
-```powershell
-cd C:\Users\YOUR_WINDOWS_USERNAME\garminconnect-mcp-pypi
-.\.venv\Scripts\garmin-connect-mcp-server-auth.exe
+uvx garmin-connect-mcp-server
 ```
 
 The auth command prompts for Garmin credentials and MFA if Garmin requires it.
-It stores tokens in `GARMINTOKENS` or, by default, in:
+Tokens stay local on your machine, usually in:
+
+```text
+~/.garminconnect
+```
+
+On Windows, that is usually:
 
 ```text
 C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
@@ -69,31 +44,15 @@ C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
 The MCP server itself never prompts on stdin. For stdio MCP servers,
 stdout/stdin are reserved for protocol messages.
 
-## Test the local server
-
-After authenticating, this command should start the MCP server:
-
-```powershell
-cd C:\Users\YOUR_WINDOWS_USERNAME\garminconnect-mcp-pypi
-.\.venv\Scripts\garmin-connect-mcp-server.exe --tokenstore C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
-```
-
-It will wait for MCP protocol input. Stop it with `Ctrl+C`.
-
 ## Msty Studio setup
 
-Msty Studio should launch the local virtual environment executable directly.
-Do not rely on `garmin-connect-mcp-server` being available on PATH inside the desktop
-app.
-
-In Msty Studio, add a local stdio JSON tool with:
+Add a local stdio JSON tool in Msty Studio:
 
 ```json
 {
-  "command": "C:\\Users\\YOUR_WINDOWS_USERNAME\\garminconnect-mcp-pypi\\.venv\\Scripts\\garmin-connect-mcp-server.exe",
+  "command": "uvx",
   "args": [
-    "--tokenstore",
-    "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect"
+    "garmin-connect-mcp-server"
   ],
   "env": {
     "GARMINTOKENS": "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect",
@@ -102,23 +61,20 @@ In Msty Studio, add a local stdio JSON tool with:
 }
 ```
 
-Replace `YOUR_WINDOWS_USERNAME` with your Windows username. If you cloned the
-repo somewhere else, replace the project path too.
-
-See [docs/msty-studio.md](docs/msty-studio.md) for the focused Msty setup page.
+Replace `YOUR_WINDOWS_USERNAME` with your Windows username. The `GARMINTOKENS`
+path must point to the same local token directory created by the auth command.
 
 ## Claude Desktop setup
 
-Claude Desktop uses an `mcpServers` wrapper around the same command:
+Claude Desktop uses an `mcpServers` wrapper around the same `uvx` command:
 
 ```json
 {
   "mcpServers": {
     "garminconnect": {
-      "command": "C:\\Users\\YOUR_WINDOWS_USERNAME\\garminconnect-mcp-pypi\\.venv\\Scripts\\garmin-connect-mcp-server.exe",
+      "command": "uvx",
       "args": [
-        "--tokenstore",
-        "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect"
+        "garmin-connect-mcp-server"
       ],
       "env": {
         "GARMINTOKENS": "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect",
@@ -129,16 +85,13 @@ Claude Desktop uses an `mcpServers` wrapper around the same command:
 }
 ```
 
-See [docs/claude-desktop.md](docs/claude-desktop.md) for the focused Claude
-Desktop setup page.
-
 ## Other stdio MCP clients
 
-Use the same executable and tokenstore:
+Use:
 
 ```text
-command: C:\Users\YOUR_WINDOWS_USERNAME\garminconnect-mcp-pypi\.venv\Scripts\garmin-connect-mcp-server.exe
-args: --tokenstore C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
+command: uvx
+args: garmin-connect-mcp-server
 ```
 
 If the client supports environment variables, set:
@@ -148,30 +101,22 @@ GARMINTOKENS=C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
 GARMINCONNECT_MCP_CONFIG=C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect-mcp\config.json
 ```
 
-## PyPI and uvx usage
+## Why auth uses --from
 
-If you are installing the published package instead of running from a clone,
-you can use:
-
-```powershell
-pip install garmin-connect-mcp-server
-garmin-connect-mcp-server-auth
-garmin-connect-mcp-server
-```
-
-Or run it with `uvx`:
+`uvx garmin-connect-mcp-server` works directly because the PyPI package and
+server command have the same name. The auth command is provided by that same
+package, so use:
 
 ```powershell
 uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
-uvx garmin-connect-mcp-server
 ```
 
-`uvx garmin-connect-mcp-server` works directly because the PyPI package and server
-command have the same name. The auth command is provided by the same package,
-so it uses `--from garmin-connect-mcp-server`.
+The shorter command below would require publishing a second PyPI package named
+`garmin-connect-mcp-server-auth`:
 
-For a GitHub clone, the full `.venv\Scripts\garmin-connect-mcp-server.exe` path is more
-reliable in desktop apps because they often do not inherit your terminal PATH.
+```powershell
+uvx garmin-connect-mcp-server-auth
+```
 
 ## Quick inspector test
 
