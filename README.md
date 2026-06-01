@@ -2,7 +2,7 @@
 
 [![Python Package](https://github.com/BojanMakivic/garminconnect-mcp-pypi/actions/workflows/publish-to-pypi.yml/badge.svg)](https://github.com/BojanMakivic/garminconnect-mcp-pypi/actions/workflows/publish-to-pypi.yml)
 ![PyPI - Version](https://img.shields.io/pypi/v/garmin-connect-mcp-server)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/garmin-connect-mcp-server?period=total&units=NONE&left_color=GRAY&right_color=GREEN&left_text=total_downloads)](https://pepy.tech/projects/garmin-connect-mcp-server)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/garmin-connect-mcp-server?period=total&units=NONE&left_color=GRAY&right_color=GREEN&left_text=total_downloads)]
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/garmin-connect-mcp-server)](https://pypistats.org/packages/garmin-connect-mcp-server)
