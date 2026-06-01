@@ -1,23 +1,23 @@
 # PyPI release checklist
 
-This folder is prepared for publishing `garminconnect-mcp` as a PyPI package.
+This folder is prepared for publishing `garmin-connect-mcp-server` as a PyPI package.
 
 ## User commands after publishing
 
 Run the MCP server:
 
 ```powershell
-uvx garminconnect-mcp
+uvx garmin-connect-mcp-server
 ```
 
 Run first-time authentication:
 
 ```powershell
-uvx --from garminconnect-mcp garminconnect-mcp-auth
+uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
 ```
 
-`uvx garminconnect-mcp-auth` only works if there is also a PyPI package named
-`garminconnect-mcp-auth`. The main package is named `garminconnect-mcp`, so the
+`uvx garmin-connect-mcp-server-auth` only works if there is also a PyPI package named
+`garmin-connect-mcp-server-auth`. The main package is named `garmin-connect-mcp-server`, so the
 auth command should use `--from`.
 
 ## Local validation
@@ -46,9 +46,9 @@ The workflow is:
 Create pending trusted publishers:
 
 ```text
-PyPI project name: garminconnect-mcp
+PyPI project name: garmin-connect-mcp-server
 GitHub owner: BojanMakivic
-GitHub repository name: garminconnect-mcp
+GitHub repository name: garminconnect-mcp-pypi
 Workflow filename: publish-to-pypi.yml
 Environment name for PyPI: pypi
 Environment name for TestPyPI: testpypi
@@ -59,8 +59,8 @@ Then publish to TestPyPI from GitHub Actions with a manual workflow run.
 Publish to real PyPI by pushing a version tag:
 
 ```powershell
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 Manual upload is also possible:

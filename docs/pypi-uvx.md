@@ -1,6 +1,6 @@
 # PyPI and uvx usage
 
-After `garminconnect-mcp` is published to PyPI, users can run it without cloning
+After `garmin-connect-mcp-server` is published to PyPI, users can run it without cloning
 the repository.
 
 ## First-time authentication
@@ -8,13 +8,13 @@ the repository.
 Run this once in a normal terminal:
 
 ```powershell
-uvx --from garminconnect-mcp garminconnect-mcp-auth
+uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
 ```
 
 On macOS or Linux:
 
 ```bash
-uvx --from garminconnect-mcp garminconnect-mcp-auth
+uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
 ```
 
 This stores Garmin tokens locally on the user's machine, usually in:
@@ -32,7 +32,7 @@ C:\Users\YOUR_WINDOWS_USERNAME\.garminconnect
 ## Run the MCP server
 
 ```powershell
-uvx garminconnect-mcp
+uvx garmin-connect-mcp-server
 ```
 
 For MCP desktop clients, use this command configuration:
@@ -41,7 +41,7 @@ For MCP desktop clients, use this command configuration:
 {
   "command": "uvx",
   "args": [
-    "garminconnect-mcp"
+    "garmin-connect-mcp-server"
   ],
   "env": {
     "GARMINTOKENS": "C:\\Users\\YOUR_WINDOWS_USERNAME\\.garminconnect"
@@ -52,23 +52,23 @@ For MCP desktop clients, use this command configuration:
 ## Why auth uses `--from`
 
 `uvx` assumes the package name and command name are the same. The package is
-named `garminconnect-mcp`, and it provides two commands:
+named `garmin-connect-mcp-server`, and it provides two commands:
 
 ```text
-garminconnect-mcp
-garminconnect-mcp-auth
+garmin-connect-mcp-server
+garmin-connect-mcp-server-auth
 ```
 
-Because `garminconnect-mcp-auth` comes from the `garminconnect-mcp` package, the
+Because `garmin-connect-mcp-server-auth` comes from the `garmin-connect-mcp-server` package, the
 auth command is:
 
 ```powershell
-uvx --from garminconnect-mcp garminconnect-mcp-auth
+uvx --from garmin-connect-mcp-server garmin-connect-mcp-server-auth
 ```
 
 The shorter command below would require publishing a second PyPI package named
-`garminconnect-mcp-auth`:
+`garmin-connect-mcp-server-auth`:
 
 ```powershell
-uvx garminconnect-mcp-auth
+uvx garmin-connect-mcp-server-auth
 ```

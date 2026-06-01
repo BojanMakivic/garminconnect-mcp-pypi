@@ -3,8 +3,8 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "garminconnect-mcp"
-version = "0.1.0"
+name = "garmin-connect-mcp-server"
+version = "0.1.1"
 description = "Model Context Protocol server for Garmin Connect"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
@@ -33,6 +33,8 @@ dev = [
 ]
 
 [project.scripts]
+garmin-connect-mcp-server = "garminconnect_mcp.server:main"
+garmin-connect-mcp-server-auth = "garminconnect_mcp.auth:main"
 garminconnect-mcp = "garminconnect_mcp.server:main"
 garminconnect-mcp-auth = "garminconnect_mcp.auth:main"
 
