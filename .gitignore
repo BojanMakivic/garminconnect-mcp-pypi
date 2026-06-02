@@ -19,3 +19,4 @@ build/
 *secret*
 *credential*
 *.log
+how_to_publish_package_to_pypi_over_github_actions.txt
