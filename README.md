@@ -7,6 +7,8 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/garmin-connect-mcp-server)](https://pypistats.org/packages/garmin-connect-mcp-server)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/garmin-connect-mcp-server?period=total&units=NONE&left_color=GRAY&right_color=GREEN&left_text=total_downloads)](https://pepy.tech/projects/garmin-connect-mcp-server)
 
+[Changelog](https://github.com/BojanMakivic/garminconnect-mcp-pypi/blob/main/CHANGELOG.md)
+
 ![image](https://raw.githubusercontent.com/BojanMakivic/garminconnect-mcp-pypi/main/ref/image.png)
 
 ## Quick start with uvx
