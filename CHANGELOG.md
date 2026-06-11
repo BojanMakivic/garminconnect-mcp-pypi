@@ -2,12 +2,17 @@
 
 All notable changes to Garmin Connect MCP Server are documented here.
 
+## 0.1.9
+
+### Changed
+
+- --
+
 ## 0.1.8
 
 ### Changed
 
 - Few minor improvements. 
-
 
 ## 0.1.7
 
