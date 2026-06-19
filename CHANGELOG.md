@@ -2,6 +2,14 @@
 
 All notable changes to Garmin Connect MCP Server are documented here.
 
+## 0.1.11
+
+### Fixed
+
+- Added Python-version-specific `garminconnect` constraints: Python 3.10 and
+  3.11 use `garminconnect>=0.2.40,<0.3.3`, while Python 3.12+ uses
+  `garminconnect>=0.3.3`.
+
 ## 0.1.10
 
 ### Changed
