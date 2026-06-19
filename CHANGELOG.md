@@ -2,6 +2,13 @@
 
 All notable changes to Garmin Connect MCP Server are documented here.
 
+## 0.1.10
+
+### Changed
+
+- Expanded the supported Python range to `>=3.10,<3.15`.
+- Added package classifiers for Python 3.10, 3.11, and 3.14.
+
 ## 0.1.9
 
 ### Changed
